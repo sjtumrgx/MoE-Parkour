@@ -87,10 +87,15 @@ MoE-Parkour 是一个面向 **Unitree Go2** 的四足跑酷项目，核心技术
 
 ```bash
 cd MoE-Parkour
+export ISAACGYM_ROOT=${ISAACGYM_ROOT:-../isaacgym}  # 官方 Isaac Gym 解压目录
 mkdir -p docker_mount/logs
 docker compose build isaacgym
 docker compose run --rm isaacgym
 ```
+
+`docker-compose.yml` 会把 `${ISAACGYM_ROOT}/python` 挂载到 `/opt/isaacgym/python`。
+这样做是必须的，因为仓库里跟踪的 `docker/python` 不包含 NVIDIA 原生
+`gym_*.so` 绑定文件。
 
 容器内建议设置：
 
@@ -103,6 +108,7 @@ export PYTHONPATH=$PYTHONPATH:/home/gymuser/robot_firmware
 
 ```bash
 export REPO_DIR=$HOME
+export ISAACGYM_ROOT=${ISAACGYM_ROOT:-$REPO_DIR/isaacgym}
 cd "$REPO_DIR"
 # 先克隆仓库，再进入目录
 cd MoE-Parkour
@@ -112,7 +118,9 @@ mkdir -p "$REPO_DIR/MoE-Parkour/docker_mount/logs"
 
 # 启动训练容器
 docker run -it --rm \
+  -v "$ISAACGYM_ROOT/python:/opt/isaacgym/python:ro" \
   -v "$REPO_DIR/MoE-Parkour/docker_mount:/docker_mount" \
+  -v "$REPO_DIR/MoE-Parkour/extreme-parkour:/home/gymuser/extreme-parkour" \
   -v "$REPO_DIR/MoE-Parkour/rl_lib:/home/gymuser/rl_lib" \
   --ipc=host --network=host --gpus=all \
   isaacgym /bin/bash

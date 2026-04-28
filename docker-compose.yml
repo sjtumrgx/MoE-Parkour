@@ -15,9 +15,11 @@ services:
     gpus: all
     environment:
       DISPLAY: ${DISPLAY:-}
-      PYTHONPATH: /home/gymuser/rl_lib:/home/gymuser/robot_firmware
+      PYTHONPATH: /opt/isaacgym/python:/home/gymuser/rl_lib:/home/gymuser/robot_firmware
     volumes:
+      - ${ISAACGYM_ROOT:-../isaacgym}/python:/opt/isaacgym/python:ro
       - ./docker_mount:/docker_mount
+      - ./extreme-parkour:/home/gymuser/extreme-parkour
       - ./rl_lib:/home/gymuser/rl_lib
       - ./robot_firmware:/home/gymuser/robot_firmware
       - /tmp/.X11-unix:/tmp/.X11-unix
