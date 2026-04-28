@@ -77,3 +77,8 @@ RUN cd extreme-parkour/rsl_rl && pip install -e .
 RUN cd extreme-parkour/legged_gym && pip install -e .
 RUN pip install "numpy<1.24" pydelatin "wandb<0.19.11" tqdm opencv-python ipdb pyfqmr flask
 RUN pip install --upgrade pydantic
+
+USER root
+COPY docker/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod 755 /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
