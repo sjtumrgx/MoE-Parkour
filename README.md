@@ -85,6 +85,23 @@ Built by `docker/Dockerfile`, including:
 
 This repository includes `docker-compose.yml` for Isaac Gym training/simulation:
 
+Before starting the container, download the official Isaac Gym package from NVIDIA
+and place it in the repository root as `./isaacgym`:
+
+```bash
+# Example 1: if you already have Isaac Gym elsewhere on this machine
+cp -a /path/to/isaacgym ./isaacgym
+
+# Example 2: after downloading and extracting the official archive
+# mv ~/Downloads/isaacgym ./isaacgym
+```
+
+Official download page:
+- https://developer.nvidia.com/isaac-gym/download
+
+The local `./isaacgym` directory is ignored by Git and is expected to remain a
+machine-local dependency.
+
 ```bash
 cd MoE-Parkour
 # Place the official Isaac Gym package under ./isaacgym first.

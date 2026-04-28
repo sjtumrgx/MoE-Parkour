@@ -85,6 +85,22 @@ MoE-Parkour 是一个面向 **Unitree Go2** 的四足跑酷项目，核心技术
 
 仓库已提供 `docker-compose.yml`，可直接运行 Isaac Gym 训练/仿真容器：
 
+启动容器前，需要先从 NVIDIA 官方下载 Isaac Gym，并放到仓库根目录
+`./isaacgym`：
+
+```bash
+# 示例 1：如果这台机器上别处已经有 Isaac Gym
+cp -a /path/to/isaacgym ./isaacgym
+
+# 示例 2：如果你刚下载并解压了官方压缩包
+# mv ~/Downloads/isaacgym ./isaacgym
+```
+
+官方下载页：
+- https://developer.nvidia.com/isaac-gym/download
+
+本地 `./isaacgym` 目录已加入 Git 忽略，预期就是每台机器各自保留的本地依赖。
+
 ```bash
 cd MoE-Parkour
 # 先把官方 Isaac Gym 解压到仓库根目录 ./isaacgym
