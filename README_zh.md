@@ -1,5 +1,7 @@
 # MoE-Parkour：Go2 跑酷训练与部署文档
 
+English documentation: [README.md](README.md)
+
 ### 1. 项目概述
 
 MoE-Parkour 是一个面向 **Unitree Go2** 的四足跑酷项目，核心技术栈包括：
@@ -29,8 +31,7 @@ MoE-Parkour 是一个面向 **Unitree Go2** 的四足跑酷项目，核心技术
 
 ```text
 .
-├── README.md                   # 入口说明 + 中英文链接
-├── README_en.md                # 英文文档
+├── README.md                   # 英文详细文档
 ├── README_zh.md                # 中文文档（本文件）
 ├── docker/
 │   ├── Dockerfile              # Isaac Gym + 训练环境镜像
@@ -79,6 +80,26 @@ MoE-Parkour 是一个面向 **Unitree Go2** 的四足跑酷项目，核心技术
 ---
 
 ### 5. 构建训练环境
+
+### 5.1 Docker Compose（推荐）
+
+仓库已提供 `docker-compose.yml`，可直接运行 Isaac Gym 训练/仿真容器：
+
+```bash
+cd MoE-Parkour
+mkdir -p docker_mount/logs
+docker compose build isaacgym
+docker compose run --rm isaacgym
+```
+
+容器内建议设置：
+
+```bash
+export PYTHONPATH=$PYTHONPATH:/home/gymuser/rl_lib
+export PYTHONPATH=$PYTHONPATH:/home/gymuser/robot_firmware
+```
+
+### 5.2 直接 docker run（等价旧流程）
 
 ```bash
 export REPO_DIR=$HOME
@@ -174,6 +195,9 @@ python rl_lib/rl_lib/train.py \
 示例：
 
 ```bash
+docker compose run --rm isaacgym
+
+# 或使用旧版 docker run：
 export REPO_DIR=$HOME
 docker run -it --rm \
   -v "$REPO_DIR/MoE-Parkour/docker_mount:/docker_mount" \

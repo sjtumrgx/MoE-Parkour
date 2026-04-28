@@ -1,0 +1,23 @@
+name: moe-parkour
+
+services:
+  isaacgym:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: isaacgym:latest
+    working_dir: /home/gymuser
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    ipc: host
+    network_mode: host
+    gpus: all
+    environment:
+      DISPLAY: ${DISPLAY:-}
+      PYTHONPATH: /home/gymuser/rl_lib:/home/gymuser/robot_firmware
+    volumes:
+      - ./docker_mount:/docker_mount
+      - ./rl_lib:/home/gymuser/rl_lib
+      - ./robot_firmware:/home/gymuser/robot_firmware
+      - /tmp/.X11-unix:/tmp/.X11-unix
