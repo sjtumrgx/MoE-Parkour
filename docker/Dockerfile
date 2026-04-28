@@ -3,8 +3,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # dependencies for gym
 #
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+RUN apt-get -o Acquire::AllowInsecureRepositories=true -o Acquire::AllowDowngradeToInsecureRepositories=true update \
+    && apt-get install -y --allow-unauthenticated --no-install-recommends \
     libxcursor-dev \
     libxrandr-dev \
     libxinerama-dev \
@@ -20,7 +20,9 @@ RUN apt-get update \
     pigz \
     git \
     libegl1 \
-    git-lfs
+    git-lfs \
+    ffmpeg \
+    sudo
 
 # Force gcc 8 to avoid CUDA 10 build issues on newer base OS
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 8
@@ -37,9 +39,6 @@ WORKDIR /opt/isaacgym
 
 RUN pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu118
 
-RUN apt install ffmpeg -y
-
-RUN apt-get install sudo -y
 RUN useradd --create-home gymuser -p "$(openssl passwd -1 ubuntu)"
 RUN usermod -aG sudo gymuser
 # Ensure sudo group users are not 
@@ -71,7 +70,8 @@ RUN sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
 
 ENV NVIDIA_VISIBLE_DEVICES=all NVIDIA_DRIVER_CAPABILITIES=all
 
-COPY extreme-parkour /home/gymuser/extreme-parkour
+COPY --chown=gymuser:gymuser extreme-parkour /home/gymuser/extreme-parkour
+RUN chmod -R u+rwX /home/gymuser/extreme-parkour
 
 RUN cd extreme-parkour/rsl_rl && pip install -e .
 RUN cd extreme-parkour/legged_gym && pip install -e .
