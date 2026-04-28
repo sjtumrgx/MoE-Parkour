@@ -3,20 +3,31 @@ set -euo pipefail
 
 GYMUSER_NAME="gymuser"
 GYMUSER_HOME="/home/${GYMUSER_NAME}"
+MANAGED_PATHS=(
+  "${GYMUSER_HOME}/rl_lib"
+  "${GYMUSER_HOME}/extreme-parkour"
+  "${GYMUSER_HOME}/robot_firmware"
+)
 
 pick_reference_path() {
   local candidate
-  for candidate in \
-    "${GYMUSER_HOME}/rl_lib" \
-    "${GYMUSER_HOME}/extreme-parkour" \
-    "${GYMUSER_HOME}/robot_firmware"
-  do
+  for candidate in "${MANAGED_PATHS[@]}"; do
     if [[ -e "${candidate}" ]]; then
       printf '%s\n' "${candidate}"
       return 0
     fi
   done
   return 1
+}
+
+sync_managed_paths() {
+  local target_uid="$1" target_gid="$2" candidate
+
+  for candidate in "${MANAGED_PATHS[@]}"; do
+    if [[ -e "${candidate}" ]]; then
+      chown -R -h "${target_uid}:${target_gid}" "${candidate}"
+    fi
+  done
 }
 
 sync_gymuser_ids() {
@@ -46,9 +57,11 @@ sync_gymuser_ids() {
     changed=1
   fi
 
+  sync_managed_paths "${target_uid}" "${target_gid}"
+
   if [[ "${changed}" == "1" ]]; then
     find "${GYMUSER_HOME}" \
-      \( -path "${GYMUSER_HOME}/rl_lib" -o -path "${GYMUSER_HOME}/extreme-parkour" -o -path "${GYMUSER_HOME}/robot_firmware" \) -prune \
+      \( -path "${MANAGED_PATHS[0]}" -o -path "${MANAGED_PATHS[1]}" -o -path "${MANAGED_PATHS[2]}" \) -prune \
       -o -exec chown -h "${target_uid}:${target_gid}" {} +
   fi
 }
