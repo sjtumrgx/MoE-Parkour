@@ -87,13 +87,14 @@ This repository includes `docker-compose.yml` for Isaac Gym training/simulation:
 
 ```bash
 cd MoE-Parkour
-export ISAACGYM_ROOT=${ISAACGYM_ROOT:-../isaacgym}  # official Isaac Gym package root
+# Place the official Isaac Gym package under ./isaacgym first.
+# If your install lives elsewhere, set ISAACGYM_ROOT=/absolute/path/to/isaacgym
 mkdir -p docker_mount/logs
 docker compose build isaacgym
 docker compose run --rm isaacgym
 ```
 
-`docker-compose.yml` bind-mounts `${ISAACGYM_ROOT}/python` into `/opt/isaacgym/python`.
+`docker-compose.yml` bind-mounts `${ISAACGYM_ROOT:-./isaacgym}/python` into `/opt/isaacgym/python`.
 This is required because the tracked `docker/python` tree does not include NVIDIA's native
 `gym_*.so` bindings.
 
@@ -108,17 +109,18 @@ export PYTHONPATH=$PYTHONPATH:/home/gymuser/robot_firmware
 
 ```bash
 export REPO_DIR=$HOME
-export ISAACGYM_ROOT=${ISAACGYM_ROOT:-$REPO_DIR/isaacgym}
 cd "$REPO_DIR"
 # Clone your repository first, then:
 cd MoE-Parkour
 
+# Place the official Isaac Gym package under "$REPO_DIR/MoE-Parkour/isaacgym"
+# or override with ISAACGYM_ROOT=/absolute/path/to/isaacgym
 docker build -f docker/Dockerfile -t isaacgym .
 mkdir -p "$REPO_DIR/MoE-Parkour/docker_mount/logs"
 
 # Launch training container
 docker run -it --rm \
-  -v "$ISAACGYM_ROOT/python:/opt/isaacgym/python:ro" \
+  -v "${ISAACGYM_ROOT:-$REPO_DIR/MoE-Parkour/isaacgym}/python:/opt/isaacgym/python:ro" \
   -v "$REPO_DIR/MoE-Parkour/docker_mount:/docker_mount" \
   -v "$REPO_DIR/MoE-Parkour/extreme-parkour:/home/gymuser/extreme-parkour" \
   -v "$REPO_DIR/MoE-Parkour/rl_lib:/home/gymuser/rl_lib" \

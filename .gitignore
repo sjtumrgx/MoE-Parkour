@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Local proprietary Isaac Gym drop
+/isaacgym/
+
 # Distribution / packaging
 .Python
 build/

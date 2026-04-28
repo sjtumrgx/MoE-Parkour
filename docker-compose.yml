@@ -17,7 +17,7 @@ services:
       DISPLAY: ${DISPLAY:-}
       PYTHONPATH: /opt/isaacgym/python:/home/gymuser/rl_lib:/home/gymuser/robot_firmware
     volumes:
-      - ${ISAACGYM_ROOT:-../isaacgym}/python:/opt/isaacgym/python:ro
+      - ${ISAACGYM_ROOT:-./isaacgym}/python:/opt/isaacgym/python:ro
       - ./docker_mount:/docker_mount
       - ./extreme-parkour:/home/gymuser/extreme-parkour
       - ./rl_lib:/home/gymuser/rl_lib
