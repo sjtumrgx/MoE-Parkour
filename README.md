@@ -118,6 +118,7 @@ This is required because the tracked `docker/python` tree does not include NVIDI
 Inside container:
 
 ```bash
+export PATH=/opt/conda/bin:$PATH
 export PYTHONPATH=$PYTHONPATH:/home/gymuser/rl_lib
 export PYTHONPATH=$PYTHONPATH:/home/gymuser/robot_firmware
 ```

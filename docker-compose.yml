@@ -15,6 +15,7 @@ services:
     gpus: all
     environment:
       DISPLAY: ${DISPLAY:-}
+      PATH: /opt/conda/bin:/usr/local/nvm/versions/node/v16.6.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
       PYTHONPATH: /opt/isaacgym/python:/home/gymuser/rl_lib:/home/gymuser/robot_firmware
     volumes:
       - ${ISAACGYM_ROOT:-./isaacgym}/python:/opt/isaacgym/python:ro

@@ -117,6 +117,7 @@ docker compose run --rm isaacgym
 容器内建议设置：
 
 ```bash
+export PATH=/opt/conda/bin:$PATH
 export PYTHONPATH=$PYTHONPATH:/home/gymuser/rl_lib
 export PYTHONPATH=$PYTHONPATH:/home/gymuser/robot_firmware
 ```
